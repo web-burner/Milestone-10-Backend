@@ -3,28 +3,22 @@ import { use } from "react";
 
 const Users = ({ usersPromise }) => {
   const initialUsers = use(usersPromise);
-  const [users, setUsers] = useState(initialUsers);
+  const [users , setUsers ] = useState(initialUsers)
+  console.log(users);
   const handleUser = (e) => {
-    console.log(users);
     e.preventDefault();
     const name = e.target.name.value;
     const email = e.target.email.value;
-    const id = users.length + 1;
-    const newUsers = { id, name, email };
-    
+    const newUser = { name, email };
     fetch("http://localhost:3500/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(newUsers),
+      body: JSON.stringify(newUser),
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log("after post ", data);
-        setUsers([...users, data]);
-        e.target.reset();
-      });
+      .then((data) => setUsers([...users,data]));
   };
   return (
     <div>
@@ -33,10 +27,11 @@ const Users = ({ usersPromise }) => {
         <input type="email" name="email" placeholder="Email" /> <br />
         <input type="submit" value="Submit" />
       </form>
+      <h2>All Users</h2>
       <div>
         {users.map((user) => (
           <p key={user.id}>
-            Name: {user.name}, Email: {user.email}
+            {user.name}, Email: {user.email}
           </p>
         ))}
       </div>
